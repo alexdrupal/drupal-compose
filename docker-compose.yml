@@ -1,0 +1,20 @@
+version: "3"
+services:
+  php:
+    build: ./docker/php
+    volumes:
+      - ./drupal:/var/www/html
+  nginx:
+    image: "nginx:mainline-alpine"
+    volumes:
+      - ./drupal:/var/www/html
+      - ./docker/nginx/drupal.conf:/etc/nginx/conf.d/drupal.conf
+    ports:
+      - 8080:80
+  percona:
+    image: "percona:ps-8"
+    environment:
+      MYSQL_ROOT_PASSWORD: drupal
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
