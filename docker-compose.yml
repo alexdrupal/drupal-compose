@@ -18,3 +18,8 @@ services:
       MYSQL_DATABASE: drupal
       MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
+    volumes:
+      percona-data:/var/lib/mysql
+
+volumes:
+  percona-data:

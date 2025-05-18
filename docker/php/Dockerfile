@@ -17,6 +17,8 @@ ENV PHPIZE_DEPS \
     pkgconf \
     re2c
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
@@ -32,19 +34,22 @@ RUN set -eux; \
 		openssl-dev \
 		readline-dev \
 		sqlite-dev \
-        zlib-dev \
-        libpng-dev \
-        jpeg-dev \
-        freetype-dev
+    zlib-dev \
+    libpng-dev \
+    jpeg-dev \
+    freetype-dev \
+    libwebp-dev
 
 # enable Drupal required minimal extensions
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install gd && docker-php-ext-enable gd
 RUN docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install opcache
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-enable pdo_mysql
+RUN docker-php-ext-install bcmath && \
+    docker-php-ext-enable bcmath
 
 # remove packages not needed for runtime
 
@@ -54,4 +59,4 @@ RUN set -eux; \
 # add packages needed for runtime
 
 RUN set -eux; \
-	apk add zlib libpng libjpeg freetype
+	apk add zlib libpng libjpeg freetype libwebp
